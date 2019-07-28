@@ -26,18 +26,31 @@ parser.add_argument('-x', '--numx', type=int, help='Number of boards in X direct
 parser.add_argument('-y', '--numy', type=int, help='Number of boards in Y direction')
 parser.add_argument('--hrail', type=int, default=0, help='Horizontal edge rail width')
 parser.add_argument('--vrail', type=int, default=0, help='Vertical edge rail width')
+parser.add_argument('-ht', '--hrailtext', help='Text to put on the horizontal edge rail')
+parser.add_argument('-vt', '--vrailtext', help='Text to put on the vertical edge rail')
 args = parser.parse_args()
 sourceBoardFile = args.sourceBoardFile
 NUM_X = args.numx
 NUM_Y = args.numy
 HORIZONTAL_EDGE_RAIL_WIDTH = args.hrail
 VERTICAL_EDGE_RAIL_WIDTH = args.vrail
+HORIZONTAL_EDGE_RAIL_TEXT = args.hrailtext
+VERTICAL_EDGE_RAIL_TEXT = args.vrailtext
 
 # check that input board is a *.kicad_pcb file
 sourceFileExtension = os.path.splitext(sourceBoardFile)[1]
 if not(sourceFileExtension == '.kicad_pcb'):
     print(sourceBoardFile + " is not a *.kicad_pcb file. Quitting.")
     quit()
+
+# check that railtext is at least 1mm
+if (HORIZONTAL_EDGE_RAIL_TEXT and HORIZONTAL_EDGE_RAIL_WIDTH < 2) or (VERTICAL_EDGE_RAIL_TEXT and VERTICAL_EDGE_RAIL_WIDTH < 2):
+    print("Rail width must be at least 2mm if using rail text. Quitting.")
+    quit()
+
+# warn if user has specified both rails
+if (HORIZONTAL_EDGE_RAIL_WIDTH and VERTICAL_EDGE_RAIL_WIDTH):
+    print("Warning: do you really want both edge rails?")
 
 # output file name is format {inputFile}_panelized.kicad_pcb
 panelOutputFile = os.path.splitext(sourceBoardFile)[0] + "_panelized.kicad_pcb"
@@ -234,6 +247,26 @@ for vscore in v_scores:
 # move back to correct layer
 for vscore in v_scores:
     vscore.SetLayer(layertable[V_SCORE_LAYER])
+
+# add text to rail
+if args.hrailtext:
+    hrail_text = pcbnew.TEXTE_PCB(board)
+    hrail_text.SetText(HORIZONTAL_EDGE_RAIL_TEXT)
+    hrail_text.SetTextSize(pcbnew.wxSize(SCALE*1,SCALE*1))
+    hrail_text.SetLayer(F_SilkS)
+    hrail_text.SetHorizJustify(GR_TEXT_HJUSTIFY_LEFT)
+    hrail_text.SetPosition(wxPoint(panelCenter.x - panelWidth/2 + HORIZONTAL_EDGE_RAIL_WIDTH/2*SCALE, panelCenter.y + panelHeight/2 - SCALE*1))
+    hrail_text.SetTextAngle(900) # rotate if on hrail
+    board.Add(hrail_text)
+
+if args.vrailtext:
+    vrail_text = pcbnew.TEXTE_PCB(board)
+    vrail_text.SetText(VERTICAL_EDGE_RAIL_TEXT)
+    vrail_text.SetTextSize(pcbnew.wxSize(SCALE*1,SCALE*1))
+    vrail_text.SetLayer(F_SilkS)
+    vrail_text.SetHorizJustify(GR_TEXT_HJUSTIFY_LEFT)
+    vrail_text.SetPosition(wxPoint(panelCenter.x - panelWidth/2 + SCALE*1, panelCenter.y - panelHeight/2 + VERTICAL_EDGE_RAIL_WIDTH/2*SCALE))
+    board.Add(vrail_text)
 
 # save output
 board.Save(panelOutputFile)

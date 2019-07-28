@@ -181,7 +181,14 @@ vscore_left = panelCenter.x - panelWidth/2 - V_SCORE_LINE_LENGTH_BEYOND_BOARD*SC
 v_scores = []
 
 # vertical v-scores
-for x in range(1,NUM_X):
+if HORIZONTAL_EDGE_RAIL_WIDTH >0:
+    rangeStart = 0
+    rangeEnd = NUM_X+1
+else:
+    rangeStart = 1
+    rangeEnd = NUM_X
+
+for x in range(rangeStart, rangeEnd):
     x_loc = panelCenter.x - panelWidth/2 + HORIZONTAL_EDGE_RAIL_WIDTH*SCALE + boardWidth*x
     v_score_line = pcbnew.DRAWSEGMENT(board)
     v_scores.append(v_score_line)
@@ -197,7 +204,14 @@ for x in range(1,NUM_X):
     board.Add(v_score_text)
 
 # horizontal v-scores
-for y in range(0,NUM_Y+1):
+if VERTICAL_EDGE_RAIL_WIDTH >0:
+    rangeStart = 0
+    rangeEnd = NUM_Y+1
+else:
+    rangeStart = 1
+    rangeEnd = NUM_Y
+
+for y in range(rangeStart, rangeEnd):
     y_loc = panelCenter.y - panelHeight/2 + VERTICAL_EDGE_RAIL_WIDTH*SCALE + boardHeight*y
     v_score_line = pcbnew.DRAWSEGMENT(board)
     v_scores.append(v_score_line)

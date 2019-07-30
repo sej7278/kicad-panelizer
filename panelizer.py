@@ -9,14 +9,7 @@ from pcbnew import *
 
 """
 A simple script to create a v-scored panel of a KiCad board.
-Author: Willem Hillier
-This script is very much in-progress, and so here's an extensive TODO list:
-    - Put report in panel file in a text field
-    - Put logo/text block on panel border
-    - Put fuducials on border
-    - Auto-calculate distance from line to text center ("V-SCORE") based on text size
-    - Is there a way to pull back copper layers to the pullback distances so if the user presses "b" on the panel, it doesn't get wrecked (by copper getting too close to V-scores)
-    - (maybe) Make a "DRC" that checks if copper is too close to V-score lines
+Original author: Willem Hillier
 """
 
 # set up command-line arguments parser
@@ -59,12 +52,13 @@ panelOutputFile = os.path.splitext(sourceBoardFile)[0] + "_panelized.kicad_pcb"
 SCALE = 1000000
 
 # v-scoring parameters
-V_SCORE_LAYER = "Eco1.User"
-V_SCORE_LINE_LENGTH_BEYOND_BOARD = 20
+V_SCORE_LAYER = "Dwgs.User"
+V_SCORE_LINE_LENGTH_BEYOND_BOARD = 10
 V_SCORE_TEXT_CENTER_TO_LINE_LENGTH = 10
 V_SCORE_TEXT = "V-SCORE"
 V_SCORE_TEXT_SIZE = 2
 V_SCORE_TEXT_THICKNESS = 0.1
+V_SCORE_TEXT_LAYER = "Dwgs.User"
 
 # creates a list that can be used to lookup layer numbers by their name
 def get_layertable():
@@ -157,28 +151,28 @@ for drawing in drawings:
 edge = pcbnew.DRAWSEGMENT(board)
 board.Add(edge)
 edge.SetStart(pcbnew.wxPoint(arrayCenter.x - arrayWidth/2 - HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y - arrayHeight/2 - VERTICAL_EDGE_RAIL_WIDTH*SCALE))
-edge.SetEnd( pcbnew.wxPoint(arrayCenter.x + arrayWidth/2 + HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y - arrayHeight/2 - VERTICAL_EDGE_RAIL_WIDTH*SCALE))
+edge.SetEnd(pcbnew.wxPoint(arrayCenter.x + arrayWidth/2 + HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y - arrayHeight/2 - VERTICAL_EDGE_RAIL_WIDTH*SCALE))
 edge.SetLayer(layertable["Edge.Cuts"])
 
 # right Edge.Cuts
 edge = pcbnew.DRAWSEGMENT(board)
 board.Add(edge)
 edge.SetStart(pcbnew.wxPoint(arrayCenter.x + arrayWidth/2 + HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y - arrayHeight/2 - VERTICAL_EDGE_RAIL_WIDTH*SCALE))
-edge.SetEnd( pcbnew.wxPoint(arrayCenter.x + arrayWidth/2 + HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y + arrayHeight/2 + VERTICAL_EDGE_RAIL_WIDTH*SCALE))
+edge.SetEnd(pcbnew.wxPoint(arrayCenter.x + arrayWidth/2 + HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y + arrayHeight/2 + VERTICAL_EDGE_RAIL_WIDTH*SCALE))
 edge.SetLayer(layertable["Edge.Cuts"])
 
 # bottom Edge.Cuts
 edge = pcbnew.DRAWSEGMENT(board)
 board.Add(edge)
-edge.SetStart( pcbnew.wxPoint(arrayCenter.x + arrayWidth/2 + HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y + arrayHeight/2 + VERTICAL_EDGE_RAIL_WIDTH*SCALE))
-edge.SetEnd( pcbnew.wxPoint(arrayCenter.x - arrayWidth/2 - HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y + arrayHeight/2 + VERTICAL_EDGE_RAIL_WIDTH*SCALE))
+edge.SetStart(pcbnew.wxPoint(arrayCenter.x + arrayWidth/2 + HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y + arrayHeight/2 + VERTICAL_EDGE_RAIL_WIDTH*SCALE))
+edge.SetEnd(pcbnew.wxPoint(arrayCenter.x - arrayWidth/2 - HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y + arrayHeight/2 + VERTICAL_EDGE_RAIL_WIDTH*SCALE))
 edge.SetLayer(layertable["Edge.Cuts"])
 
 # left Edge.Cuts
 edge = pcbnew.DRAWSEGMENT(board)
 board.Add(edge)
-edge.SetStart( pcbnew.wxPoint(arrayCenter.x - arrayWidth/2 - HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y + arrayHeight/2 + VERTICAL_EDGE_RAIL_WIDTH*SCALE))
-edge.SetEnd( pcbnew.wxPoint(arrayCenter.x - arrayWidth/2 - HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y - arrayHeight/2 - VERTICAL_EDGE_RAIL_WIDTH*SCALE))
+edge.SetStart(pcbnew.wxPoint(arrayCenter.x - arrayWidth/2 - HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y + arrayHeight/2 + VERTICAL_EDGE_RAIL_WIDTH*SCALE))
+edge.SetEnd(pcbnew.wxPoint(arrayCenter.x - arrayWidth/2 - HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y - arrayHeight/2 - VERTICAL_EDGE_RAIL_WIDTH*SCALE))
 edge.SetLayer(layertable["Edge.Cuts"])
 
 # re-calculate board dimensions with new edge cuts
@@ -212,7 +206,7 @@ for x in range(rangeStart, rangeEnd):
     v_score_text.SetText(V_SCORE_TEXT)
     v_score_text.SetPosition(wxPoint(x_loc, vscore_top - V_SCORE_TEXT_CENTER_TO_LINE_LENGTH*SCALE))
     v_score_text.SetTextSize(pcbnew.wxSize(SCALE*V_SCORE_TEXT_SIZE,SCALE*V_SCORE_TEXT_SIZE))
-    v_score_text.SetLayer(layertable[V_SCORE_LAYER])
+    v_score_text.SetLayer(layertable[V_SCORE_TEXT_LAYER])
     v_score_text.SetTextAngle(900)
     board.Add(v_score_text)
 
@@ -235,7 +229,7 @@ for y in range(rangeStart, rangeEnd):
     v_score_text.SetText(V_SCORE_TEXT)
     v_score_text.SetPosition(wxPoint(vscore_left - V_SCORE_TEXT_CENTER_TO_LINE_LENGTH*SCALE, y_loc))
     v_score_text.SetTextSize(pcbnew.wxSize(SCALE*V_SCORE_TEXT_SIZE,SCALE*V_SCORE_TEXT_SIZE))
-    v_score_text.SetLayer(layertable[V_SCORE_LAYER])
+    v_score_text.SetLayer(layertable[V_SCORE_TEXT_LAYER])
     v_score_text.SetTextAngle(0)
     board.Add(v_score_text)
 

@@ -15,16 +15,20 @@ Original author: Willem Hillier
 # set up command-line arguments parser
 parser = ArgumentParser(description="A script to panelize KiCad files.")
 parser.add_argument(dest="sourceBoardFile", help='Path to the *.kicad_pcb file to be panelized')
-parser.add_argument('-x', '--numx', type=int, help='Number of boards in X direction')
-parser.add_argument('-y', '--numy', type=int, help='Number of boards in Y direction')
+parser.add_argument('--numx', type=int, help='Number of boards in X direction')
+parser.add_argument('--numy', type=int, help='Number of boards in Y direction')
+parser.add_argument('--panelx', type=int, help='Maximum panel size in X direction')
+parser.add_argument('--panely', type=int, help='Maximum panel size in Y direction')
 parser.add_argument('--hrail', type=int, default=0, help='Horizontal edge rail width')
 parser.add_argument('--vrail', type=int, default=0, help='Vertical edge rail width')
-parser.add_argument('-ht', '--hrailtext', help='Text to put on the horizontal edge rail')
-parser.add_argument('-vt', '--vrailtext', help='Text to put on the vertical edge rail')
+parser.add_argument('--hrailtext', help='Text to put on the horizontal edge rail')
+parser.add_argument('--vrailtext', help='Text to put on the vertical edge rail')
 args = parser.parse_args()
 sourceBoardFile = args.sourceBoardFile
 NUM_X = args.numx
 NUM_Y = args.numy
+PANEL_X = args.panelx
+PANEL_Y = args.panely
 HORIZONTAL_EDGE_RAIL_WIDTH = args.hrail
 VERTICAL_EDGE_RAIL_WIDTH = args.vrail
 HORIZONTAL_EDGE_RAIL_TEXT = args.hrailtext
@@ -41,6 +45,16 @@ if (HORIZONTAL_EDGE_RAIL_TEXT and HORIZONTAL_EDGE_RAIL_WIDTH < 2) or (VERTICAL_E
     print("Rail width must be at least 2mm if using rail text. Quitting.")
     quit()
 
+# only allow numbers or panels
+if (PANEL_X or PANEL_Y) and (NUM_X or NUM_Y):
+    print("Specify number of boards or size of panel, not both. Quitting.")
+    quit()
+
+# expect panel size or number of boards
+if (not PANEL_X or not PANEL_Y) and (not NUM_X or not NUM_Y):
+    print("Specify number of boards or size of panel. Quitting.")
+    quit()
+
 # warn if user has specified both rails
 if (HORIZONTAL_EDGE_RAIL_WIDTH and VERTICAL_EDGE_RAIL_WIDTH):
     print("Warning: do you really want both edge rails?")
@@ -52,13 +66,13 @@ panelOutputFile = os.path.splitext(sourceBoardFile)[0] + "_panelized.kicad_pcb"
 SCALE = 1000000
 
 # v-scoring parameters
-V_SCORE_LAYER = "Dwgs.User"
-V_SCORE_LINE_LENGTH_BEYOND_BOARD = 10
+V_SCORE_LAYER = "Edge.Cuts"
+V_SCORE_LINE_LENGTH_BEYOND_BOARD = -0.05
 V_SCORE_TEXT_CENTER_TO_LINE_LENGTH = 10
 V_SCORE_TEXT = "V-SCORE"
 V_SCORE_TEXT_SIZE = 2
 V_SCORE_TEXT_THICKNESS = 0.1
-V_SCORE_TEXT_LAYER = "Dwgs.User"
+V_SCORE_TEXT_LAYER = "Cmts.User"
 
 # creates a list that can be used to lookup layer numbers by their name
 def get_layertable():
@@ -77,6 +91,18 @@ layertable = get_layertable()
 # get dimensions of board
 boardWidth = board.GetBoardEdgesBoundingBox().GetWidth()
 boardHeight = board.GetBoardEdgesBoundingBox().GetHeight()
+
+# how many whole boards can we fit on the panel
+if (PANEL_X):
+    NUM_X = int( (PANEL_X*SCALE - 2*HORIZONTAL_EDGE_RAIL_WIDTH*SCALE) / boardWidth )
+
+if (PANEL_Y):
+    NUM_Y = int( (PANEL_Y*SCALE - 2*VERTICAL_EDGE_RAIL_WIDTH*SCALE) / boardHeight )
+
+# check we can actually panelize the board
+if (NUM_X == 0 or NUM_Y == 0):
+    print("Panel size is too small for board. Quitting.")
+    quit()
 
 # array of tracks
 tracks = board.GetTracks()
@@ -266,5 +292,7 @@ if args.vrailtext:
 board.Save(panelOutputFile)
 
 # print report
+if (PANEL_X or PANEL_Y):
+    print("You can fit " + str(NUM_X) +" x " + str(NUM_Y) + " boards on the panel")
 print("Board dimensions: " + str(boardWidth/SCALE) + "x" + str(boardHeight/SCALE) + "mm")
 print("Panel dimensions: " + str(panelWidth/SCALE) + "x" + str(panelHeight/SCALE) + "mm")

@@ -71,7 +71,6 @@ SCALE = 1000000
 # v-scoring parameters
 V_SCORE_LAYER = "Edge.Cuts"
 V_SCORE_LINE_LENGTH_BEYOND_BOARD = -0.05
-V_SCORE_TEXT_CENTER_TO_LINE_LENGTH = 10
 V_SCORE_TEXT = "V-SCORE"
 V_SCORE_TEXT_SIZE = 2
 V_SCORE_TEXT_THICKNESS = 0.1
@@ -233,7 +232,8 @@ for x in range(rangeStart, rangeEnd):
     v_score_line.SetLayer(layertable[V_SCORE_LAYER])
     v_score_text = pcbnew.TEXTE_PCB(board)
     v_score_text.SetText(V_SCORE_TEXT)
-    v_score_text.SetPosition(wxPoint(x_loc, vscore_top - V_SCORE_TEXT_CENTER_TO_LINE_LENGTH*SCALE))
+    v_score_text.SetHorizJustify(GR_TEXT_HJUSTIFY_LEFT)
+    v_score_text.SetPosition(wxPoint(x_loc, vscore_top - V_SCORE_TEXT_SIZE*SCALE))
     v_score_text.SetTextSize(pcbnew.wxSize(SCALE*V_SCORE_TEXT_SIZE,SCALE*V_SCORE_TEXT_SIZE))
     v_score_text.SetLayer(layertable[V_SCORE_TEXT_LAYER])
     v_score_text.SetTextAngle(900)
@@ -256,7 +256,8 @@ for y in range(rangeStart, rangeEnd):
     v_score_line.SetLayer(layertable[V_SCORE_LAYER])
     v_score_text = pcbnew.TEXTE_PCB(board)
     v_score_text.SetText(V_SCORE_TEXT)
-    v_score_text.SetPosition(wxPoint(vscore_left - V_SCORE_TEXT_CENTER_TO_LINE_LENGTH*SCALE, y_loc))
+    v_score_text.SetHorizJustify(GR_TEXT_HJUSTIFY_RIGHT)
+    v_score_text.SetPosition(wxPoint(vscore_left - V_SCORE_TEXT_SIZE*SCALE, y_loc))
     v_score_text.SetTextSize(pcbnew.wxSize(SCALE*V_SCORE_TEXT_SIZE,SCALE*V_SCORE_TEXT_SIZE))
     v_score_text.SetLayer(layertable[V_SCORE_TEXT_LAYER])
     v_score_text.SetTextAngle(0)

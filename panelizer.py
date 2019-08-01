@@ -12,8 +12,11 @@ A simple script to create a v-scored panel of a KiCad board.
 Original author: Willem Hillier
 """
 
+__version__ = '1.1'
+
 # set up command-line arguments parser
 parser = ArgumentParser(description="A script to panelize KiCad files.")
+parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__)
 parser.add_argument(dest="sourceBoardFile", help='Path to the *.kicad_pcb file to be panelized')
 parser.add_argument('--numx', type=int, help='Number of boards in X direction')
 parser.add_argument('--numy', type=int, help='Number of boards in Y direction')

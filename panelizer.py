@@ -12,7 +12,7 @@ A simple script to create a v-scored panel of a KiCad board.
 Original author: Willem Hillier
 """
 
-__version__ = '1.1'
+__version__ = '1.2'
 
 # set up command-line arguments parser
 parser = ArgumentParser(description="A script to panelize KiCad files.")
@@ -26,6 +26,8 @@ parser.add_argument('--hrail', type=int, default=0, help='Horizontal edge rail w
 parser.add_argument('--vrail', type=int, default=0, help='Vertical edge rail width')
 parser.add_argument('--hrailtext', help='Text to put on the horizontal edge rail')
 parser.add_argument('--vrailtext', help='Text to put on the vertical edge rail')
+parser.add_argument('--htitle', action='store_true', help='Print title info on horizontal edge rail')
+parser.add_argument('--vtitle', action='store_true', help='Print title info on vertical edge rail')
 args = parser.parse_args()
 sourceBoardFile = args.sourceBoardFile
 NUM_X = args.numx
@@ -44,7 +46,7 @@ if not(sourceFileExtension == '.kicad_pcb'):
     quit()
 
 # check that railtext is at least 1mm
-if (HORIZONTAL_EDGE_RAIL_TEXT and HORIZONTAL_EDGE_RAIL_WIDTH < 2) or (VERTICAL_EDGE_RAIL_TEXT and VERTICAL_EDGE_RAIL_WIDTH < 2):
+if ( ((HORIZONTAL_EDGE_RAIL_TEXT or args.htitle) and HORIZONTAL_EDGE_RAIL_WIDTH < 2) or ((VERTICAL_EDGE_RAIL_TEXT or args.vtitle) and VERTICAL_EDGE_RAIL_WIDTH < 2) ):
     print("Rail width must be at least 2mm if using rail text. Quitting.")
     quit()
 
@@ -291,6 +293,39 @@ if args.vrailtext:
     vrail_text.SetHorizJustify(GR_TEXT_HJUSTIFY_LEFT)
     vrail_text.SetPosition(wxPoint(panelCenter.x - panelWidth/2 + SCALE*1, panelCenter.y - panelHeight/2 + VERTICAL_EDGE_RAIL_WIDTH/2*SCALE))
     board.Add(vrail_text)
+
+# add title text to rail
+TITLE_TEXT = ""
+if board.GetTitleBlock().GetTitle():
+    TITLE_TEXT += str(board.GetTitleBlock().GetTitle())
+
+if board.GetTitleBlock().GetRevision():
+    TITLE_TEXT += " Rev. " + str(board.GetTitleBlock().GetRevision())
+
+if board.GetTitleBlock().GetDate():
+    TITLE_TEXT += ", " + str(board.GetTitleBlock().GetDate())
+
+if board.GetTitleBlock().GetCompany():
+    TITLE_TEXT += " (c) " + str(board.GetTitleBlock().GetCompany())
+
+if args.htitle:
+    titleblock_text = pcbnew.TEXTE_PCB(board)
+    titleblock_text.SetText(TITLE_TEXT)
+    titleblock_text.SetTextSize(pcbnew.wxSize(SCALE*1,SCALE*1))
+    titleblock_text.SetLayer(F_SilkS)
+    titleblock_text.SetHorizJustify(GR_TEXT_HJUSTIFY_LEFT)
+    titleblock_text.SetPosition(wxPoint(panelCenter.x + panelWidth/2 - HORIZONTAL_EDGE_RAIL_WIDTH/2*SCALE, panelCenter.y + panelHeight/2 - SCALE*1))
+    titleblock_text.SetTextAngle(900)
+    board.Add(titleblock_text)
+
+if args.vtitle:
+    titleblock_text = pcbnew.TEXTE_PCB(board)
+    titleblock_text.SetText(TITLE_TEXT)
+    titleblock_text.SetTextSize(pcbnew.wxSize(SCALE*1,SCALE*1))
+    titleblock_text.SetLayer(F_SilkS)
+    titleblock_text.SetHorizJustify(GR_TEXT_HJUSTIFY_LEFT)
+    titleblock_text.SetPosition(wxPoint(panelCenter.x - panelWidth/2 + SCALE*1, panelCenter.y + panelHeight/2 - VERTICAL_EDGE_RAIL_WIDTH/2*SCALE))
+    board.Add(titleblock_text)
 
 # save output
 board.Save(panelOutputFile)

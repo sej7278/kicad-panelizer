@@ -12,7 +12,7 @@ A simple script to create a v-scored panel of a KiCad board.
 Original author: Willem Hillier
 """
 
-__version__ = '1.2'
+__version__ = '1.3'
 
 # set up command-line arguments parser
 parser = ArgumentParser(description="A script to panelize KiCad files.")
@@ -326,6 +326,18 @@ if args.vtitle:
     titleblock_text.SetHorizJustify(GR_TEXT_HJUSTIFY_LEFT)
     titleblock_text.SetPosition(wxPoint(panelCenter.x - panelWidth/2 + SCALE*1, panelCenter.y + panelHeight/2 - VERTICAL_EDGE_RAIL_WIDTH/2*SCALE))
     board.Add(titleblock_text)
+
+# print report to panel
+report_text = pcbnew.TEXTE_PCB(board)
+report_args = str(panelOutputFile) + " (" + str(NUM_X) + "x" + str(NUM_Y) + " panel) generated with:\n./panelizer.py"
+for x in sys.argv[1:]:
+    report_args += " " + x
+report_text.SetText(report_args)
+report_text.SetTextSize(pcbnew.wxSize(SCALE*1,SCALE*1))
+report_text.SetLayer(layertable["Cmts.User"])
+report_text.SetHorizJustify(GR_TEXT_HJUSTIFY_CENTER)
+report_text.SetPosition(wxPoint(panelCenter.x, vscore_bottom + 10*SCALE))
+board.Add(report_text)
 
 # save output
 board.Save(panelOutputFile)

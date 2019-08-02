@@ -23,6 +23,10 @@ Switch | Explanation
 ```--htitle``` | Output title block fields (Title, Company, Revision, Date) on right hrail
 ```--vtitle``` | Output title block fields (Title, Company, Revision, Date) on bottom vrail
 
+### Example output:
+
+![demo.png](demo.png)
+
 ### Hints & Tips:
 
 If you don't use Edge.Cuts as your ```V_SCORE_LAYER``` don't refill zones when exporting the gerbers as Kicad will essentially merge your panel into a single board.

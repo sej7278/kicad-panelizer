@@ -3,7 +3,6 @@
 import os
 import sys
 from argparse import ArgumentParser
-from pathlib import Path
 import pcbnew
 from pcbnew import *
 
@@ -12,7 +11,7 @@ A simple script to create a v-scored panel of a KiCad board.
 Original author: Willem Hillier
 """
 
-__version__ = '1.3'
+__version__ = '1.3.1'
 
 # set up command-line arguments parser
 parser = ArgumentParser(description="A script to panelize KiCad files.")

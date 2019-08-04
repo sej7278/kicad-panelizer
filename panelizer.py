@@ -11,7 +11,7 @@ A simple script to create a v-scored panel of a KiCad board.
 Original author: Willem Hillier
 """
 
-__version__ = '1.3.1'
+__version__ = '1.4'
 
 # set up command-line arguments parser
 parser = ArgumentParser(description="A script to panelize KiCad files.")
@@ -27,6 +27,10 @@ parser.add_argument('--hrailtext', help='Text to put on the horizontal edge rail
 parser.add_argument('--vrailtext', help='Text to put on the vertical edge rail')
 parser.add_argument('--htitle', action='store_true', help='Print title info on horizontal edge rail')
 parser.add_argument('--vtitle', action='store_true', help='Print title info on vertical edge rail')
+parser.add_argument('--vscorelayer', default='Edge.Cuts', help='Layer to put v-score lines on')
+parser.add_argument('--vscoretextlayer', default='Cmts.User', help='Layer to put v-score text on')
+parser.add_argument('--vscoretext', default='V-SCORE', help='Text used to indicate v-scores')
+parser.add_argument('--vscoreextends', type=float, default='-0.05', help='How far past the board to extend the v-score lines, defaults to -0.05')
 args = parser.parse_args()
 sourceBoardFile = args.sourceBoardFile
 NUM_X = args.numx
@@ -37,6 +41,10 @@ HORIZONTAL_EDGE_RAIL_WIDTH = args.hrail
 VERTICAL_EDGE_RAIL_WIDTH = args.vrail
 HORIZONTAL_EDGE_RAIL_TEXT = args.hrailtext
 VERTICAL_EDGE_RAIL_TEXT = args.vrailtext
+V_SCORE_LAYER = args.vscorelayer
+V_SCORE_TEXT_LAYER = args.vscoretextlayer
+V_SCORE_TEXT = args.vscoretext
+V_SCORE_LINE_LENGTH_BEYOND_BOARD = args.vscoreextends
 
 # check that input board is a *.kicad_pcb file
 sourceFileExtension = os.path.splitext(sourceBoardFile)[1]
@@ -70,12 +78,8 @@ panelOutputFile = os.path.splitext(sourceBoardFile)[0] + "_panelized.kicad_pcb"
 SCALE = 1000000
 
 # v-scoring parameters
-V_SCORE_LAYER = "Edge.Cuts"
-V_SCORE_LINE_LENGTH_BEYOND_BOARD = -0.05
-V_SCORE_TEXT = "V-SCORE"
 V_SCORE_TEXT_SIZE = 2
 V_SCORE_TEXT_THICKNESS = 0.1
-V_SCORE_TEXT_LAYER = "Cmts.User"
 
 # creates a list that can be used to lookup layer numbers by their name
 def get_layertable():

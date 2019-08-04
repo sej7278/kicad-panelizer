@@ -35,4 +35,6 @@ PCBWay, [Seeed](http://support.seeedstudio.com/knowledgebase/articles/388503-wha
 ) and [JLCPCB](https://support.jlcpcb.com/article/49-pcb-panelization
 ) like v-scores to be on the Edge.Cuts layer. In this case Kicad seems to cope with zones being refilled, however the 3d viewer can't figure out the board outline. Also it will fail the DRC due to the board outline not being a polygon. I would set ```V_SCORE_LINE_LENGTH_BEYOND_BOARD``` to -0.05 in this case, so that the v-scores meet in the middle of the default 0.1mm lines rather than extending past the panel.
 
+[Elecrow](https://www.elecrow.com/download/How-to-Reduce-Cost-with-Panelizing-Service.pdf) apparently will accept v-scores in the Edge.Cuts (.GKO) layer or silkscreen layer if you put a comment on the silkscreen layer, so you should edit panelizer.py to set ```V_SCORE_TEXT_LAYER = "F.SilkS"```.
+
 Please submit feature requests and bug reports via GitHub [issues](https://github.com/sej7278/kicad-panelizer/issues).

@@ -31,6 +31,8 @@ Switch | Explanation
 
 ![demo.png](demo.png)
 
+![panel.png](demo.png)
+
 ### Hints & Tips:
 
 If you don't use Edge.Cuts as your ```V_SCORE_LAYER``` don't refill zones when exporting the gerbers as Kicad will essentially merge your panel into a single board.

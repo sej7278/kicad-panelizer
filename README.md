@@ -31,7 +31,7 @@ Switch | Explanation
 
 ![demo.png](demo.png)
 
-![panel.png](demo.png)
+![panel.jpg](panel.jpg)
 
 ### Hints & Tips:
 

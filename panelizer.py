@@ -11,7 +11,7 @@ A simple script to create a v-scored panel of a KiCad board.
 Original author: Willem Hillier
 """
 
-__version__ = '1.4'
+__version__ = '1.5'
 
 # set up command-line arguments parser
 parser = ArgumentParser(description="A script to panelize KiCad files.")
@@ -344,6 +344,10 @@ board.Add(report_text)
 
 # save output
 board.Save(panelOutputFile)
+
+# warn if panel is under 70x70mm
+if (panelWidth/SCALE < 70 or panelHeight/SCALE < 70):
+    print("Warning: panel is under 70x70mm")
 
 # print report
 if (PANEL_X or PANEL_Y):

@@ -5,4 +5,5 @@ REM
 PATH="c:\Program Files\KiCad\bin";%PATH%
 echo %~dp0
 
+python --version
 python %~dp0\panelizer.py %*

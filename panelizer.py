@@ -13,8 +13,9 @@ Original author: Willem Hillier
 
 __version__ = '1.5.1'
 
-reload(sys)
-sys.setdefaultencoding("utf-8")
+if sys.version_info[0] == 2:
+  reload(sys)
+  sys.setdefaultencoding("utf-8")
 
 
 # set up command-line arguments parser

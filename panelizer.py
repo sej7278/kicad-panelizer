@@ -11,7 +11,7 @@ A simple script to create a v-scored panel of a KiCad board.
 Original author: Willem Hillier
 """
 
-__version__ = '1.5'
+__version__ = '1.5.1'
 
 reload(sys)
 sys.setdefaultencoding("utf-8")

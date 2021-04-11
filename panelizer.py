@@ -13,6 +13,10 @@ Original author: Willem Hillier
 
 __version__ = '1.5'
 
+reload(sys)
+sys.setdefaultencoding("utf-8")
+
+
 # set up command-line arguments parser
 parser = ArgumentParser(description="A script to panelize KiCad files.")
 parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__)

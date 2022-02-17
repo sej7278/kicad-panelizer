@@ -11,7 +11,7 @@ A simple script to create a v-scored panel of a KiCad board.
 Original author: Willem Hillier
 """
 
-__version__ = '1.6'
+__version__ = '1.5'
 
 # set up command-line arguments parser
 parser = ArgumentParser(description="A script to panelize KiCad files.")
@@ -28,7 +28,7 @@ parser.add_argument('--vrailtext', help='Text to put on the vertical edge rail')
 parser.add_argument('--htitle', action='store_true', help='Print title info on horizontal edge rail')
 parser.add_argument('--vtitle', action='store_true', help='Print title info on vertical edge rail')
 parser.add_argument('--vscorelayer', default='Edge.Cuts', help='Layer to put v-score lines on')
-parser.add_argument('--vscoretextlayer', default='User.Comments', help='Layer to put v-score text on')
+parser.add_argument('--vscoretextlayer', default='Cmts.User', help='Layer to put v-score text on')
 parser.add_argument('--vscoretext', default='V-SCORE', help='Text used to indicate v-scores')
 parser.add_argument('--vscoreextends', type=float, default='-0.05', help='How far past the board to extend the v-score lines, defaults to -0.05')
 args = parser.parse_args()
@@ -123,7 +123,7 @@ for sourceTrack in tracks:                          # iterate through each track
                 newTracks.append(newTrack)          # add to temporary list of tracks
 
 for track in newTracks:
-    tracks.append(track)
+    tracks.Append(track)
 
 # array of drawing objects
 drawings = board.GetDrawings()
@@ -140,13 +140,13 @@ for drawing in newDrawings:
     board.Add(drawing)
 
 # array of modules
-modules = board.GetFootprints()
+modules = board.GetModules()
 newModules = []
 for sourceModule in modules:
     for x in range(0,NUM_X):
         for y in range(0, NUM_Y):
             if((x!=0)or(y!=0)):
-                newModule = pcbnew.FOOTPRINT(sourceModule)
+                newModule = pcbnew.MODULE(sourceModule)
                 newModule.SetPosition(wxPoint(x*boardWidth + sourceModule.GetPosition().x, y*boardHeight + sourceModule.GetPosition().y))
                 newModules.append(newModule)
 
@@ -154,7 +154,7 @@ for module in newModules:
     board.Add(module)
 
 # array of zones
-modules = board.GetFootprints()
+modules = board.GetModules()
 newZones = []
 for a in range(0,board.GetAreaCount()):
     sourceZone = board.GetArea(a)
@@ -181,28 +181,28 @@ for drawing in drawings:
         drawing.DeleteStructure()
 
 # top Edge.Cuts
-edge = pcbnew.PCB_SHAPE(board)
+edge = pcbnew.DRAWSEGMENT(board)
 board.Add(edge)
 edge.SetStart(pcbnew.wxPoint(arrayCenter.x - arrayWidth/2 - HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y - arrayHeight/2 - VERTICAL_EDGE_RAIL_WIDTH*SCALE))
 edge.SetEnd(pcbnew.wxPoint(arrayCenter.x + arrayWidth/2 + HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y - arrayHeight/2 - VERTICAL_EDGE_RAIL_WIDTH*SCALE))
 edge.SetLayer(layertable["Edge.Cuts"])
 
 # right Edge.Cuts
-edge = pcbnew.PCB_SHAPE(board)
+edge = pcbnew.DRAWSEGMENT(board)
 board.Add(edge)
 edge.SetStart(pcbnew.wxPoint(arrayCenter.x + arrayWidth/2 + HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y - arrayHeight/2 - VERTICAL_EDGE_RAIL_WIDTH*SCALE))
 edge.SetEnd(pcbnew.wxPoint(arrayCenter.x + arrayWidth/2 + HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y + arrayHeight/2 + VERTICAL_EDGE_RAIL_WIDTH*SCALE))
 edge.SetLayer(layertable["Edge.Cuts"])
 
 # bottom Edge.Cuts
-edge = pcbnew.PCB_SHAPE(board)
+edge = pcbnew.DRAWSEGMENT(board)
 board.Add(edge)
 edge.SetStart(pcbnew.wxPoint(arrayCenter.x + arrayWidth/2 + HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y + arrayHeight/2 + VERTICAL_EDGE_RAIL_WIDTH*SCALE))
 edge.SetEnd(pcbnew.wxPoint(arrayCenter.x - arrayWidth/2 - HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y + arrayHeight/2 + VERTICAL_EDGE_RAIL_WIDTH*SCALE))
 edge.SetLayer(layertable["Edge.Cuts"])
 
 # left Edge.Cuts
-edge = pcbnew.PCB_SHAPE(board)
+edge = pcbnew.DRAWSEGMENT(board)
 board.Add(edge)
 edge.SetStart(pcbnew.wxPoint(arrayCenter.x - arrayWidth/2 - HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y + arrayHeight/2 + VERTICAL_EDGE_RAIL_WIDTH*SCALE))
 edge.SetEnd(pcbnew.wxPoint(arrayCenter.x - arrayWidth/2 - HORIZONTAL_EDGE_RAIL_WIDTH*SCALE, arrayCenter.y - arrayHeight/2 - VERTICAL_EDGE_RAIL_WIDTH*SCALE))
@@ -230,12 +230,12 @@ else:
 
 for x in range(rangeStart, rangeEnd):
     x_loc = panelCenter.x - panelWidth/2 + HORIZONTAL_EDGE_RAIL_WIDTH*SCALE + boardWidth*x
-    v_score_line = pcbnew.PCB_SHAPE(board)
+    v_score_line = pcbnew.DRAWSEGMENT(board)
     v_scores.append(v_score_line)
     v_score_line.SetStart(pcbnew.wxPoint(x_loc, vscore_top))
     v_score_line.SetEnd(pcbnew.wxPoint(x_loc, vscore_bottom))
     v_score_line.SetLayer(layertable[V_SCORE_LAYER])
-    v_score_text = pcbnew.PCB_TEXT(board)
+    v_score_text = pcbnew.TEXTE_PCB(board)
     v_score_text.SetText(V_SCORE_TEXT)
     v_score_text.SetHorizJustify(GR_TEXT_HJUSTIFY_LEFT)
     v_score_text.SetPosition(wxPoint(x_loc, vscore_top - V_SCORE_TEXT_SIZE*SCALE))
@@ -254,12 +254,12 @@ else:
 
 for y in range(rangeStart, rangeEnd):
     y_loc = panelCenter.y - panelHeight/2 + VERTICAL_EDGE_RAIL_WIDTH*SCALE + boardHeight*y
-    v_score_line = pcbnew.PCB_SHAPE(board)
+    v_score_line = pcbnew.DRAWSEGMENT(board)
     v_scores.append(v_score_line)
     v_score_line.SetStart(pcbnew.wxPoint(vscore_left, y_loc))
     v_score_line.SetEnd(pcbnew.wxPoint(vscore_right, y_loc))
     v_score_line.SetLayer(layertable[V_SCORE_LAYER])
-    v_score_text = pcbnew.PCB_TEXT(board)
+    v_score_text = pcbnew.TEXTE_PCB(board)
     v_score_text.SetText(V_SCORE_TEXT)
     v_score_text.SetHorizJustify(GR_TEXT_HJUSTIFY_RIGHT)
     v_score_text.SetPosition(wxPoint(vscore_left - V_SCORE_TEXT_SIZE*SCALE, y_loc))
@@ -279,7 +279,7 @@ for vscore in v_scores:
 
 # add text to rail
 if args.hrailtext:
-    hrail_text = pcbnew.PCB_TEXT(board)
+    hrail_text = pcbnew.TEXTE_PCB(board)
     hrail_text.SetText(HORIZONTAL_EDGE_RAIL_TEXT)
     hrail_text.SetTextSize(pcbnew.wxSize(SCALE*1,SCALE*1))
     hrail_text.SetLayer(F_SilkS)
@@ -289,7 +289,7 @@ if args.hrailtext:
     board.Add(hrail_text)
 
 if args.vrailtext:
-    vrail_text = pcbnew.PCB_TEXT(board)
+    vrail_text = pcbnew.TEXTE_PCB(board)
     vrail_text.SetText(VERTICAL_EDGE_RAIL_TEXT)
     vrail_text.SetTextSize(pcbnew.wxSize(SCALE*1,SCALE*1))
     vrail_text.SetLayer(F_SilkS)
@@ -312,7 +312,7 @@ if board.GetTitleBlock().GetCompany():
     TITLE_TEXT += " (c) " + str(board.GetTitleBlock().GetCompany())
 
 if args.htitle:
-    titleblock_text = pcbnew.PCB_TEXT(board)
+    titleblock_text = pcbnew.TEXTE_PCB(board)
     titleblock_text.SetText(TITLE_TEXT)
     titleblock_text.SetTextSize(pcbnew.wxSize(SCALE*1,SCALE*1))
     titleblock_text.SetLayer(F_SilkS)
@@ -322,7 +322,7 @@ if args.htitle:
     board.Add(titleblock_text)
 
 if args.vtitle:
-    titleblock_text = pcbnew.PCB_TEXT(board)
+    titleblock_text = pcbnew.TEXTE_PCB(board)
     titleblock_text.SetText(TITLE_TEXT)
     titleblock_text.SetTextSize(pcbnew.wxSize(SCALE*1,SCALE*1))
     titleblock_text.SetLayer(F_SilkS)
@@ -331,13 +331,13 @@ if args.vtitle:
     board.Add(titleblock_text)
 
 # print report to panel
-report_text = pcbnew.PCB_TEXT(board)
+report_text = pcbnew.TEXTE_PCB(board)
 report_args = str(panelOutputFile) + " (" + str(NUM_X) + "x" + str(NUM_Y) + " panel) generated with:\n./panelizer.py"
 for x in sys.argv[1:]:
     report_args += " " + x
 report_text.SetText(report_args)
 report_text.SetTextSize(pcbnew.wxSize(SCALE*1,SCALE*1))
-report_text.SetLayer(layertable["User.Comments"])
+report_text.SetLayer(layertable["Cmts.User"])
 report_text.SetHorizJustify(GR_TEXT_HJUSTIFY_CENTER)
 report_text.SetPosition(wxPoint(panelCenter.x, vscore_bottom + 10*SCALE))
 board.Add(report_text)

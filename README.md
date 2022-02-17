@@ -2,7 +2,7 @@
 A simple script to create a v-scored panel of a KiCad board.
 
 To use:
-1. Ensure you have KiCad 5.1.2+ installed
+1. Ensure you have KiCad 6.0.1+ installed
 2. Clone script to an appropriate location
 3. Open a terminal and `cd` to the directory of the script
 4. Run it with python3: `./panelizer.py --panelx=100 --panely=100 /path/to/source_board.kicad_pcb`
@@ -23,7 +23,7 @@ Switch | Explanation
 ```--htitle``` | Output title block fields (Title, Company, Revision, Date) on right hrail
 ```--vtitle``` | Output title block fields (Title, Company, Revision, Date) on bottom vrail
 ```--vscorelayer``` | Layer to put v-score lines on, defaults to Edge.Cuts
-```--vscoretextlayer``` | Layer to put v-score text on, defaults to Cmts.User
+```--vscoretextlayer``` | Layer to put v-score text on, defaults to User.Comments
 ```--vscoretext``` | Text used to indicate v-scores, defaults to V-SCORE
 ```--vscoreextends``` | How far past the board in mm to extend the v-scores, defaults to -0.05 (no extension)
 

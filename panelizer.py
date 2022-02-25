@@ -7,7 +7,7 @@ Original author: Willem Hillier
 
 # pylint: disable=invalid-name,too-many-boolean-expressions
 
-__version__ = "1.7"
+__version__ = "1.8"
 
 import os
 import sys
@@ -150,16 +150,16 @@ for sourceTrack in tracks:  # iterate through each track to be copied
                 newTracks.append(newTrack)  # add to temporary list of tracks
 
 for track in newTracks:
-    tracks.append(track)
+    board.Add(track)
 
 # array of drawing objects
 drawings = board.GetDrawings()
 newDrawings = []
-for drawing in drawings:
+for sourceDrawing in drawings:
     for x in range(0, NUM_X):
         for y in range(0, NUM_Y):
             if (x != 0) or (y != 0):
-                newDrawing = drawing.Duplicate()
+                newDrawing = sourceDrawing.Duplicate()
                 newDrawing.Move(pcbnew.wxPoint(x * boardWidth, y * boardHeight))
                 newDrawings.append(newDrawing)
 

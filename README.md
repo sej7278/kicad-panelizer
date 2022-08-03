@@ -26,6 +26,7 @@ Switch | Explanation
 ```--vscoretextlayer``` | Layer to put v-score text on, defaults to User.Comments
 ```--vscoretext``` | Text used to indicate v-scores, defaults to V-SCORE
 ```--vscoreextends``` | How far past the board in mm to extend the v-scores, defaults to -0.05 (no extension)
+```--padding``` | Optional gap between boards, defaults to 0 (no gap)
 
 ### Example output:
 

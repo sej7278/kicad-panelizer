@@ -7,7 +7,7 @@ Original author: Willem Hillier
 
 # pylint: disable=invalid-name,too-many-boolean-expressions
 
-__version__ = "1.8"
+__version__ = "1.9"
 
 import os
 import sys
@@ -35,6 +35,7 @@ parser.add_argument(
 )
 parser.add_argument("--numx", type=int, help="Number of boards in X direction")
 parser.add_argument("--numy", type=int, help="Number of boards in Y direction")
+parser.add_argument("--padding", type=int, default=0, help="Extra space between boards")
 parser.add_argument("--panelx", type=int, help="Maximum panel size in X direction")
 parser.add_argument("--panely", type=int, help="Maximum panel size in Y direction")
 parser.add_argument("--hrail", type=int, default=0, help="Horizontal edge rail width")
@@ -68,6 +69,7 @@ NUM_X = args.numx
 NUM_Y = args.numy
 PANEL_X = args.panelx
 PANEL_Y = args.panely
+PADDING = args.padding
 HORIZONTAL_EDGE_RAIL_WIDTH = args.hrail
 VERTICAL_EDGE_RAIL_WIDTH = args.vrail
 HORIZONTAL_EDGE_RAIL_TEXT = args.hrailtext
@@ -121,8 +123,8 @@ board = pcbnew.LoadBoard(sourceBoardFile)
 layertable = get_layertable()
 
 # get dimensions of board
-boardWidth = board.GetBoardEdgesBoundingBox().GetWidth()
-boardHeight = board.GetBoardEdgesBoundingBox().GetHeight()
+boardWidth = board.GetBoardEdgesBoundingBox().GetWidth() + PADDING * SCALE
+boardHeight = board.GetBoardEdgesBoundingBox().GetHeight() + PADDING * SCALE
 
 # how many whole boards can we fit on the panel
 if PANEL_X:
@@ -217,14 +219,26 @@ edge = pcbnew.PCB_SHAPE(board)
 board.Add(edge)
 edge.SetStart(
     pcbnew.wxPoint(
-        arrayCenter.x - arrayWidth / 2 - HORIZONTAL_EDGE_RAIL_WIDTH * SCALE,
-        arrayCenter.y - arrayHeight / 2 - VERTICAL_EDGE_RAIL_WIDTH * SCALE,
+        arrayCenter.x
+        - arrayWidth / 2
+        - HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
+        - PADDING / 2 * SCALE,
+        arrayCenter.y
+        - arrayHeight / 2
+        - VERTICAL_EDGE_RAIL_WIDTH * SCALE
+        - PADDING / 2 * SCALE,
     )
 )
 edge.SetEnd(
     pcbnew.wxPoint(
-        arrayCenter.x + arrayWidth / 2 + HORIZONTAL_EDGE_RAIL_WIDTH * SCALE,
-        arrayCenter.y - arrayHeight / 2 - VERTICAL_EDGE_RAIL_WIDTH * SCALE,
+        arrayCenter.x
+        + arrayWidth / 2
+        + HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
+        + PADDING / 2 * SCALE,
+        arrayCenter.y
+        - arrayHeight / 2
+        - VERTICAL_EDGE_RAIL_WIDTH * SCALE
+        - PADDING / 2 * SCALE,
     )
 )
 edge.SetLayer(layertable["Edge.Cuts"])
@@ -234,14 +248,26 @@ edge = pcbnew.PCB_SHAPE(board)
 board.Add(edge)
 edge.SetStart(
     pcbnew.wxPoint(
-        arrayCenter.x + arrayWidth / 2 + HORIZONTAL_EDGE_RAIL_WIDTH * SCALE,
-        arrayCenter.y - arrayHeight / 2 - VERTICAL_EDGE_RAIL_WIDTH * SCALE,
+        arrayCenter.x
+        + arrayWidth / 2
+        + HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
+        + PADDING / 2 * SCALE,
+        arrayCenter.y
+        - arrayHeight / 2
+        - VERTICAL_EDGE_RAIL_WIDTH * SCALE
+        - PADDING / 2 * SCALE,
     )
 )
 edge.SetEnd(
     pcbnew.wxPoint(
-        arrayCenter.x + arrayWidth / 2 + HORIZONTAL_EDGE_RAIL_WIDTH * SCALE,
-        arrayCenter.y + arrayHeight / 2 + VERTICAL_EDGE_RAIL_WIDTH * SCALE,
+        arrayCenter.x
+        + arrayWidth / 2
+        + HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
+        + PADDING / 2 * SCALE,
+        arrayCenter.y
+        + arrayHeight / 2
+        + VERTICAL_EDGE_RAIL_WIDTH * SCALE
+        + PADDING / 2 * SCALE,
     )
 )
 edge.SetLayer(layertable["Edge.Cuts"])
@@ -251,14 +277,26 @@ edge = pcbnew.PCB_SHAPE(board)
 board.Add(edge)
 edge.SetStart(
     pcbnew.wxPoint(
-        arrayCenter.x + arrayWidth / 2 + HORIZONTAL_EDGE_RAIL_WIDTH * SCALE,
-        arrayCenter.y + arrayHeight / 2 + VERTICAL_EDGE_RAIL_WIDTH * SCALE,
+        arrayCenter.x
+        + arrayWidth / 2
+        + HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
+        + PADDING / 2 * SCALE,
+        arrayCenter.y
+        + arrayHeight / 2
+        + VERTICAL_EDGE_RAIL_WIDTH * SCALE
+        + PADDING / 2 * SCALE,
     )
 )
 edge.SetEnd(
     pcbnew.wxPoint(
-        arrayCenter.x - arrayWidth / 2 - HORIZONTAL_EDGE_RAIL_WIDTH * SCALE,
-        arrayCenter.y + arrayHeight / 2 + VERTICAL_EDGE_RAIL_WIDTH * SCALE,
+        arrayCenter.x
+        - arrayWidth / 2
+        - HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
+        - PADDING / 2 * SCALE,
+        arrayCenter.y
+        + arrayHeight / 2
+        + VERTICAL_EDGE_RAIL_WIDTH * SCALE
+        + PADDING / 2 * SCALE,
     )
 )
 edge.SetLayer(layertable["Edge.Cuts"])
@@ -268,14 +306,26 @@ edge = pcbnew.PCB_SHAPE(board)
 board.Add(edge)
 edge.SetStart(
     pcbnew.wxPoint(
-        arrayCenter.x - arrayWidth / 2 - HORIZONTAL_EDGE_RAIL_WIDTH * SCALE,
-        arrayCenter.y + arrayHeight / 2 + VERTICAL_EDGE_RAIL_WIDTH * SCALE,
+        arrayCenter.x
+        - arrayWidth / 2
+        - HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
+        - PADDING / 2 * SCALE,
+        arrayCenter.y
+        + arrayHeight / 2
+        + VERTICAL_EDGE_RAIL_WIDTH * SCALE
+        + PADDING / 2 * SCALE,
     )
 )
 edge.SetEnd(
     pcbnew.wxPoint(
-        arrayCenter.x - arrayWidth / 2 - HORIZONTAL_EDGE_RAIL_WIDTH * SCALE,
-        arrayCenter.y - arrayHeight / 2 - VERTICAL_EDGE_RAIL_WIDTH * SCALE,
+        arrayCenter.x
+        - arrayWidth / 2
+        - HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
+        - PADDING / 2 * SCALE,
+        arrayCenter.y
+        - arrayHeight / 2
+        - VERTICAL_EDGE_RAIL_WIDTH * SCALE
+        - PADDING / 2 * SCALE,
     )
 )
 edge.SetLayer(layertable["Edge.Cuts"])

@@ -1,14 +1,16 @@
 # kicad-panelizer
+
 A simple script to create a v-scored panel of a KiCad board.
 
 To use:
-1. Ensure you have KiCad 6.0.1+ installed
+
+1. Ensure you have KiCad 7 installed
 2. Clone script to an appropriate location
 3. Open a terminal and `cd` to the directory of the script
 4. Run it with python3: `./panelizer.py --panelx=100 --panely=100 /path/to/source_board.kicad_pcb`
 5. Panelized output will be saved to the same directory as the source board, with the name `{sourceboardname}_panelized.kicad_pcb`
 
-### CLI Arguments:
+## CLI Arguments
 
 Switch | Explanation
 ------ | -----------
@@ -28,13 +30,13 @@ Switch | Explanation
 ```--vscoreextends``` | How far past the board in mm to extend the v-scores, defaults to -0.05 (no extension)
 ```--padding``` | Optional gap between boards, defaults to 0 (no gap)
 
-### Example output:
+## Example output
 
 ![demo.png](demo.png)
 
 ![panel.jpg](panel.jpg)
 
-### Hints & Tips:
+## Hints & Tips
 
 If you don't use Edge.Cuts as your ```V_SCORE_LAYER``` don't refill zones when exporting the gerbers as Kicad will essentially merge your panel into a single board.
 

@@ -7,7 +7,7 @@ Original author: Willem Hillier
 
 # pylint: disable=invalid-name,too-many-boolean-expressions
 
-__version__ = "2.0"
+__version__ = "1.9"
 
 import os
 import sys
@@ -147,7 +147,7 @@ for sourceTrack in tracks:  # iterate through each track to be copied
             if (x != 0) or (y != 0):  # do not duplicate source object to location
                 newTrack = sourceTrack.Duplicate()
                 newTrack.Move(
-                    pcbnew.VECTOR2I(pcbnew.wxPoint(x * boardWidth, y * boardHeight))
+                    pcbnew.wxPoint(x * boardWidth, y * boardHeight)
                 )  # move to correct location
                 newTracks.append(newTrack)  # add to temporary list of tracks
 
@@ -162,9 +162,7 @@ for sourceDrawing in drawings:
         for y in range(0, NUM_Y):
             if (x != 0) or (y != 0):
                 newDrawing = sourceDrawing.Duplicate()
-                newDrawing.Move(
-                    pcbnew.VECTOR2I(pcbnew.wxPoint(x * boardWidth, y * boardHeight))
-                )
+                newDrawing.Move(pcbnew.wxPoint(x * boardWidth, y * boardHeight))
                 newDrawings.append(newDrawing)
 
 for drawing in newDrawings:
@@ -179,11 +177,9 @@ for sourceModule in modules:
             if (x != 0) or (y != 0):
                 newModule = pcbnew.FOOTPRINT(sourceModule)
                 newModule.SetPosition(
-                    pcbnew.VECTOR2I(
-                        pcbnew.wxPoint(
-                            x * boardWidth + sourceModule.GetPosition().x,
-                            y * boardHeight + sourceModule.GetPosition().y,
-                        )
+                    pcbnew.wxPoint(
+                        x * boardWidth + sourceModule.GetPosition().x,
+                        y * boardHeight + sourceModule.GetPosition().y,
                     )
                 )
                 newModules.append(newModule)
@@ -201,9 +197,7 @@ for a in range(0, board.GetAreaCount()):
             if (x != 0) or (y != 0):
                 newZone = sourceZone.Duplicate()
                 newZone.SetNet(sourceZone.GetNet())
-                newZone.Move(
-                    pcbnew.VECTOR2I(pcbnew.wxPoint(x * boardWidth, y * boardHeight))
-                )
+                newZone.Move(pcbnew.wxPoint(x * boardWidth, y * boardHeight))
                 newZones.append(newZone)
 
 for zone in newZones:
@@ -224,31 +218,27 @@ for drawing in drawings:
 edge = pcbnew.PCB_SHAPE(board)
 board.Add(edge)
 edge.SetStart(
-    pcbnew.VECTOR2I(
-        pcbnew.wxPoint(
-            arrayCenter.x
-            - arrayWidth / 2
-            - HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
-            - PADDING / 2 * SCALE,
-            arrayCenter.y
-            - arrayHeight / 2
-            - VERTICAL_EDGE_RAIL_WIDTH * SCALE
-            - PADDING / 2 * SCALE,
-        )
+    pcbnew.wxPoint(
+        arrayCenter.x
+        - arrayWidth / 2
+        - HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
+        - PADDING / 2 * SCALE,
+        arrayCenter.y
+        - arrayHeight / 2
+        - VERTICAL_EDGE_RAIL_WIDTH * SCALE
+        - PADDING / 2 * SCALE,
     )
 )
 edge.SetEnd(
-    pcbnew.VECTOR2I(
-        pcbnew.wxPoint(
-            arrayCenter.x
-            + arrayWidth / 2
-            + HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
-            + PADDING / 2 * SCALE,
-            arrayCenter.y
-            - arrayHeight / 2
-            - VERTICAL_EDGE_RAIL_WIDTH * SCALE
-            - PADDING / 2 * SCALE,
-        )
+    pcbnew.wxPoint(
+        arrayCenter.x
+        + arrayWidth / 2
+        + HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
+        + PADDING / 2 * SCALE,
+        arrayCenter.y
+        - arrayHeight / 2
+        - VERTICAL_EDGE_RAIL_WIDTH * SCALE
+        - PADDING / 2 * SCALE,
     )
 )
 edge.SetLayer(layertable["Edge.Cuts"])
@@ -257,31 +247,27 @@ edge.SetLayer(layertable["Edge.Cuts"])
 edge = pcbnew.PCB_SHAPE(board)
 board.Add(edge)
 edge.SetStart(
-    pcbnew.VECTOR2I(
-        pcbnew.wxPoint(
-            arrayCenter.x
-            + arrayWidth / 2
-            + HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
-            + PADDING / 2 * SCALE,
-            arrayCenter.y
-            - arrayHeight / 2
-            - VERTICAL_EDGE_RAIL_WIDTH * SCALE
-            - PADDING / 2 * SCALE,
-        )
+    pcbnew.wxPoint(
+        arrayCenter.x
+        + arrayWidth / 2
+        + HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
+        + PADDING / 2 * SCALE,
+        arrayCenter.y
+        - arrayHeight / 2
+        - VERTICAL_EDGE_RAIL_WIDTH * SCALE
+        - PADDING / 2 * SCALE,
     )
 )
 edge.SetEnd(
-    pcbnew.VECTOR2I(
-        pcbnew.wxPoint(
-            arrayCenter.x
-            + arrayWidth / 2
-            + HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
-            + PADDING / 2 * SCALE,
-            arrayCenter.y
-            + arrayHeight / 2
-            + VERTICAL_EDGE_RAIL_WIDTH * SCALE
-            + PADDING / 2 * SCALE,
-        )
+    pcbnew.wxPoint(
+        arrayCenter.x
+        + arrayWidth / 2
+        + HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
+        + PADDING / 2 * SCALE,
+        arrayCenter.y
+        + arrayHeight / 2
+        + VERTICAL_EDGE_RAIL_WIDTH * SCALE
+        + PADDING / 2 * SCALE,
     )
 )
 edge.SetLayer(layertable["Edge.Cuts"])
@@ -290,31 +276,27 @@ edge.SetLayer(layertable["Edge.Cuts"])
 edge = pcbnew.PCB_SHAPE(board)
 board.Add(edge)
 edge.SetStart(
-    pcbnew.VECTOR2I(
-        pcbnew.wxPoint(
-            arrayCenter.x
-            + arrayWidth / 2
-            + HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
-            + PADDING / 2 * SCALE,
-            arrayCenter.y
-            + arrayHeight / 2
-            + VERTICAL_EDGE_RAIL_WIDTH * SCALE
-            + PADDING / 2 * SCALE,
-        )
+    pcbnew.wxPoint(
+        arrayCenter.x
+        + arrayWidth / 2
+        + HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
+        + PADDING / 2 * SCALE,
+        arrayCenter.y
+        + arrayHeight / 2
+        + VERTICAL_EDGE_RAIL_WIDTH * SCALE
+        + PADDING / 2 * SCALE,
     )
 )
 edge.SetEnd(
-    pcbnew.VECTOR2I(
-        pcbnew.wxPoint(
-            arrayCenter.x
-            - arrayWidth / 2
-            - HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
-            - PADDING / 2 * SCALE,
-            arrayCenter.y
-            + arrayHeight / 2
-            + VERTICAL_EDGE_RAIL_WIDTH * SCALE
-            + PADDING / 2 * SCALE,
-        )
+    pcbnew.wxPoint(
+        arrayCenter.x
+        - arrayWidth / 2
+        - HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
+        - PADDING / 2 * SCALE,
+        arrayCenter.y
+        + arrayHeight / 2
+        + VERTICAL_EDGE_RAIL_WIDTH * SCALE
+        + PADDING / 2 * SCALE,
     )
 )
 edge.SetLayer(layertable["Edge.Cuts"])
@@ -323,31 +305,27 @@ edge.SetLayer(layertable["Edge.Cuts"])
 edge = pcbnew.PCB_SHAPE(board)
 board.Add(edge)
 edge.SetStart(
-    pcbnew.VECTOR2I(
-        pcbnew.wxPoint(
-            arrayCenter.x
-            - arrayWidth / 2
-            - HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
-            - PADDING / 2 * SCALE,
-            arrayCenter.y
-            + arrayHeight / 2
-            + VERTICAL_EDGE_RAIL_WIDTH * SCALE
-            + PADDING / 2 * SCALE,
-        )
+    pcbnew.wxPoint(
+        arrayCenter.x
+        - arrayWidth / 2
+        - HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
+        - PADDING / 2 * SCALE,
+        arrayCenter.y
+        + arrayHeight / 2
+        + VERTICAL_EDGE_RAIL_WIDTH * SCALE
+        + PADDING / 2 * SCALE,
     )
 )
 edge.SetEnd(
-    pcbnew.VECTOR2I(
-        pcbnew.wxPoint(
-            arrayCenter.x
-            - arrayWidth / 2
-            - HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
-            - PADDING / 2 * SCALE,
-            arrayCenter.y
-            - arrayHeight / 2
-            - VERTICAL_EDGE_RAIL_WIDTH * SCALE
-            - PADDING / 2 * SCALE,
-        )
+    pcbnew.wxPoint(
+        arrayCenter.x
+        - arrayWidth / 2
+        - HORIZONTAL_EDGE_RAIL_WIDTH * SCALE
+        - PADDING / 2 * SCALE,
+        arrayCenter.y
+        - arrayHeight / 2
+        - VERTICAL_EDGE_RAIL_WIDTH * SCALE
+        - PADDING / 2 * SCALE,
     )
 )
 edge.SetLayer(layertable["Edge.Cuts"])
@@ -383,22 +361,20 @@ for x in range(RANGE_START, RANGE_END):
     )
     v_score_line = pcbnew.PCB_SHAPE(board)
     v_scores.append(v_score_line)
-    v_score_line.SetStart(pcbnew.VECTOR2I(pcbnew.wxPoint(x_loc, vscore_top)))
-    v_score_line.SetEnd(pcbnew.VECTOR2I(pcbnew.wxPoint(x_loc, vscore_bottom)))
+    v_score_line.SetStart(pcbnew.wxPoint(x_loc, vscore_top))
+    v_score_line.SetEnd(pcbnew.wxPoint(x_loc, vscore_bottom))
     v_score_line.SetLayer(layertable[V_SCORE_LAYER])
     v_score_text = pcbnew.PCB_TEXT(board)
     v_score_text.SetText(V_SCORE_TEXT)
-    v_score_text.SetHorizJustify(pcbnew.GR_TEXT_H_ALIGN_LEFT)
+    v_score_text.SetHorizJustify(pcbnew.GR_TEXT_HJUSTIFY_LEFT)
     v_score_text.SetPosition(
-        pcbnew.VECTOR2I(pcbnew.wxPoint(x_loc, vscore_top - V_SCORE_TEXT_SIZE * SCALE))
+        pcbnew.wxPoint(x_loc, vscore_top - V_SCORE_TEXT_SIZE * SCALE)
     )
     v_score_text.SetTextSize(
-        pcbnew.VECTOR2I(
-            pcbnew.wxSize(SCALE * V_SCORE_TEXT_SIZE, SCALE * V_SCORE_TEXT_SIZE)
-        )
+        pcbnew.wxSize(SCALE * V_SCORE_TEXT_SIZE, SCALE * V_SCORE_TEXT_SIZE)
     )
     v_score_text.SetLayer(layertable[V_SCORE_TEXT_LAYER])
-    v_score_text.SetTextAngle(pcbnew.EDA_ANGLE(900, 0))
+    v_score_text.SetTextAngle(900)
     board.Add(v_score_text)
 
 # horizontal v-scores
@@ -418,22 +394,20 @@ for y in range(RANGE_START, RANGE_END):
     )
     v_score_line = pcbnew.PCB_SHAPE(board)
     v_scores.append(v_score_line)
-    v_score_line.SetStart(pcbnew.VECTOR2I(pcbnew.wxPoint(vscore_left, y_loc)))
-    v_score_line.SetEnd(pcbnew.VECTOR2I(pcbnew.wxPoint(vscore_right, y_loc)))
+    v_score_line.SetStart(pcbnew.wxPoint(vscore_left, y_loc))
+    v_score_line.SetEnd(pcbnew.wxPoint(vscore_right, y_loc))
     v_score_line.SetLayer(layertable[V_SCORE_LAYER])
     v_score_text = pcbnew.PCB_TEXT(board)
     v_score_text.SetText(V_SCORE_TEXT)
-    v_score_text.SetHorizJustify(pcbnew.GR_TEXT_H_ALIGN_RIGHT)
+    v_score_text.SetHorizJustify(pcbnew.GR_TEXT_HJUSTIFY_RIGHT)
     v_score_text.SetPosition(
-        pcbnew.VECTOR2I(pcbnew.wxPoint(vscore_left - V_SCORE_TEXT_SIZE * SCALE, y_loc))
+        pcbnew.wxPoint(vscore_left - V_SCORE_TEXT_SIZE * SCALE, y_loc)
     )
     v_score_text.SetTextSize(
-        pcbnew.VECTOR2I(
-            pcbnew.wxSize(SCALE * V_SCORE_TEXT_SIZE, SCALE * V_SCORE_TEXT_SIZE)
-        )
+        pcbnew.wxSize(SCALE * V_SCORE_TEXT_SIZE, SCALE * V_SCORE_TEXT_SIZE)
     )
     v_score_text.SetLayer(layertable[V_SCORE_TEXT_LAYER])
-    v_score_text.SetTextAngle(pcbnew.EDA_ANGLE(0, 0))
+    v_score_text.SetTextAngle(0)
     board.Add(v_score_text)
 
 # move vscores to edge.cuts layer
@@ -449,32 +423,28 @@ for vscore in v_scores:
 if args.hrailtext:
     hrail_text = pcbnew.PCB_TEXT(board)
     hrail_text.SetText(HORIZONTAL_EDGE_RAIL_TEXT)
-    hrail_text.SetTextSize(pcbnew.VECTOR2I(pcbnew.wxSize(SCALE * 1, SCALE * 1)))
+    hrail_text.SetTextSize(pcbnew.wxSize(SCALE * 1, SCALE * 1))
     hrail_text.SetLayer(pcbnew.F_SilkS)
-    hrail_text.SetHorizJustify(pcbnew.GR_TEXT_H_ALIGN_LEFT)
+    hrail_text.SetHorizJustify(pcbnew.GR_TEXT_HJUSTIFY_LEFT)
     hrail_text.SetPosition(
-        pcbnew.VECTOR2I(
-            pcbnew.wxPoint(
-                panelCenter.x - panelWidth / 2 + HORIZONTAL_EDGE_RAIL_WIDTH / 2 * SCALE,
-                panelCenter.y + panelHeight / 2 - SCALE * 1,
-            )
+        pcbnew.wxPoint(
+            panelCenter.x - panelWidth / 2 + HORIZONTAL_EDGE_RAIL_WIDTH / 2 * SCALE,
+            panelCenter.y + panelHeight / 2 - SCALE * 1,
         )
     )
-    hrail_text.SetTextAngle(pcbnew.EDA_ANGLE(900, 0))  # rotate if on hrail
+    hrail_text.SetTextAngle(900)  # rotate if on hrail
     board.Add(hrail_text)
 
 if args.vrailtext:
     vrail_text = pcbnew.PCB_TEXT(board)
     vrail_text.SetText(VERTICAL_EDGE_RAIL_TEXT)
-    vrail_text.SetTextSize(pcbnew.VECTOR2I(pcbnew.wxSize(SCALE * 1, SCALE * 1)))
+    vrail_text.SetTextSize(pcbnew.wxSize(SCALE * 1, SCALE * 1))
     vrail_text.SetLayer(pcbnew.F_SilkS)
-    vrail_text.SetHorizJustify(pcbnew.GR_TEXT_H_ALIGN_LEFT)
+    vrail_text.SetHorizJustify(pcbnew.GR_TEXT_HJUSTIFY_LEFT)
     vrail_text.SetPosition(
-        pcbnew.VECTOR2I(
-            pcbnew.wxPoint(
-                panelCenter.x - panelWidth / 2 + SCALE * 1,
-                panelCenter.y - panelHeight / 2 + VERTICAL_EDGE_RAIL_WIDTH / 2 * SCALE,
-            )
+        pcbnew.wxPoint(
+            panelCenter.x - panelWidth / 2 + SCALE * 1,
+            panelCenter.y - panelHeight / 2 + VERTICAL_EDGE_RAIL_WIDTH / 2 * SCALE,
         )
     )
     board.Add(vrail_text)
@@ -496,32 +466,28 @@ if board.GetTitleBlock().GetCompany():
 if args.htitle:
     titleblock_text = pcbnew.PCB_TEXT(board)
     titleblock_text.SetText(TITLE_TEXT)
-    titleblock_text.SetTextSize(pcbnew.VECTOR2I(pcbnew.wxSize(SCALE * 1, SCALE * 1)))
+    titleblock_text.SetTextSize(pcbnew.wxSize(SCALE * 1, SCALE * 1))
     titleblock_text.SetLayer(pcbnew.F_SilkS)
-    titleblock_text.SetHorizJustify(pcbnew.GR_TEXT_H_ALIGN_LEFT)
+    titleblock_text.SetHorizJustify(pcbnew.GR_TEXT_HJUSTIFY_LEFT)
     titleblock_text.SetPosition(
-        pcbnew.VECTOR2I(
-            pcbnew.wxPoint(
-                panelCenter.x + panelWidth / 2 - HORIZONTAL_EDGE_RAIL_WIDTH / 2 * SCALE,
-                panelCenter.y + panelHeight / 2 - SCALE * 1,
-            )
+        pcbnew.wxPoint(
+            panelCenter.x + panelWidth / 2 - HORIZONTAL_EDGE_RAIL_WIDTH / 2 * SCALE,
+            panelCenter.y + panelHeight / 2 - SCALE * 1,
         )
     )
-    titleblock_text.SetTextAngle(pcbnew.EDA_ANGLE(900, 0))
+    titleblock_text.SetTextAngle(900)
     board.Add(titleblock_text)
 
 if args.vtitle:
     titleblock_text = pcbnew.PCB_TEXT(board)
     titleblock_text.SetText(TITLE_TEXT)
-    titleblock_text.SetTextSize(pcbnew.VECTOR2I(pcbnew.wxSize(SCALE * 1, SCALE * 1)))
+    titleblock_text.SetTextSize(pcbnew.wxSize(SCALE * 1, SCALE * 1))
     titleblock_text.SetLayer(pcbnew.F_SilkS)
-    titleblock_text.SetHorizJustify(pcbnew.GR_TEXT_H_ALIGN_LEFT)
+    titleblock_text.SetHorizJustify(pcbnew.GR_TEXT_HJUSTIFY_LEFT)
     titleblock_text.SetPosition(
-        pcbnew.VECTOR2I(
-            pcbnew.wxPoint(
-                panelCenter.x - panelWidth / 2 + SCALE * 1,
-                panelCenter.y + panelHeight / 2 - VERTICAL_EDGE_RAIL_WIDTH / 2 * SCALE,
-            )
+        pcbnew.wxPoint(
+            panelCenter.x - panelWidth / 2 + SCALE * 1,
+            panelCenter.y + panelHeight / 2 - VERTICAL_EDGE_RAIL_WIDTH / 2 * SCALE,
         )
     )
     board.Add(titleblock_text)
@@ -539,12 +505,10 @@ report_args = (
 for x in sys.argv[1:]:
     report_args += " " + x
 report_text.SetText(report_args)
-report_text.SetTextSize(pcbnew.VECTOR2I(pcbnew.wxSize(SCALE * 1, SCALE * 1)))
+report_text.SetTextSize(pcbnew.wxSize(SCALE * 1, SCALE * 1))
 report_text.SetLayer(layertable["User.Comments"])
-report_text.SetHorizJustify(pcbnew.GR_TEXT_H_ALIGN_CENTER)
-report_text.SetPosition(
-    pcbnew.VECTOR2I(pcbnew.wxPoint(panelCenter.x, vscore_bottom + 10 * SCALE))
-)
+report_text.SetHorizJustify(pcbnew.GR_TEXT_HJUSTIFY_CENTER)
+report_text.SetPosition(pcbnew.wxPoint(panelCenter.x, vscore_bottom + 10 * SCALE))
 board.Add(report_text)
 
 # save output
